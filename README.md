@@ -15,17 +15,17 @@ A collection of operating-systems coursework labs written in C++ and Python, cov
 
 ## Overview
 
-- **Lab 1** (`1-lab/`) implements an `Allocator` class backed by an anonymous `mmap` region. Blocks carry an 8-byte header storing current and previous block descriptors (size with allocation flag packed into the low bits), and the allocator supports allocation by best fit, reallocation, freeing with forward/backward coalescing, and a `memoryDump`.
-- **Lab 2** (`2-lab/`) implements a buddy-system `Allocator` that keeps free blocks in size classes (powers of two) and recursively splits and coalesces buddies. Three implementations of the same allocator share an interface and differ only in how coalescing is run:
-  - `2-lab.cpp` — synchronous.
-  - `2-lab.async.cpp` — coalescing dispatched via `std::async`.
-  - `2-lab.threads.cpp` — coalescing dispatched via `std::thread` with a `std::mutex` and `std::condition_variable`.
+- **Lab 1** ([`1-lab/`](1-lab)) implements an [`Allocator`](1-lab/1-lab.cpp) class backed by an anonymous `mmap` region. Blocks carry an 8-byte header storing current and previous block descriptors (size with allocation flag packed into the low bits), and the allocator supports allocation by best fit, reallocation, freeing with forward/backward coalescing, and a `memoryDump`.
+- **Lab 2** ([`2-lab/`](2-lab)) implements a buddy-system [`Allocator`](2-lab/2-lab.cpp) that keeps free blocks in size classes (powers of two) and recursively splits and coalesces buddies. Three implementations of the same allocator share an interface and differ only in how coalescing is run:
+  - [`2-lab.cpp`](2-lab/2-lab.cpp) — synchronous.
+  - [`2-lab.async.cpp`](2-lab/2-lab.async.cpp) — coalescing dispatched via `std::async`.
+  - [`2-lab.threads.cpp`](2-lab/2-lab.threads.cpp) — coalescing dispatched via `std::thread` with a `std::mutex` and `std::condition_variable`.
 
-  `2-lab.test.cpp` selects one implementation (via `#include`) and times a sequence of operations with a scoped `Timer`.
-- **Lab 3** (`3-lab/`) simulates a Shortest Job First scheduler. `ShortestJobFirst.py` generates processes with random arrival gaps and burst times and computes completion, turnaround, and wait times plus CPU idle percentage; `3-lab.py` sweeps arrival intensities and renders three plots (average wait time vs. intensity, idle percentage vs. intensity, and process count vs. average wait time).
-- **Lab 4** (`4-lab/`) generates a random binary matrix and runs a planner that, per diagonal step, swaps in the minimum-row-sum process and the maximum-column-sum resource via row and column permutations.
-- **Lab 5** (`5-lab/`) measures and compares execution time of two triple-nested loops over a `100 x 100 x 100` array that differ only in index order, demonstrating the effect of cache locality.
-- **Lab 6** (`6-lab/`) is the same benchmark scaled to `300 x 300 x 300`, built with profiling instrumentation; `6-lab.sh` compiles with `-pg -O2`, runs the binary, and produces a `gprof` report.
+  [`2-lab.test.cpp`](2-lab/2-lab.test.cpp) selects one implementation (via `#include`) and times a sequence of operations with a scoped `Timer`.
+- **Lab 3** ([`3-lab/`](3-lab)) simulates a Shortest Job First scheduler. [`ShortestJobFirst.py`](3-lab/ShortestJobFirst.py) generates processes with random arrival gaps and burst times and computes completion, turnaround, and wait times plus CPU idle percentage; [`3-lab.py`](3-lab/3-lab.py) sweeps arrival intensities and renders three plots (average wait time vs. intensity, idle percentage vs. intensity, and process count vs. average wait time).
+- **Lab 4** ([`4-lab/`](4-lab)) generates a random binary matrix and runs a planner that, per diagonal step, swaps in the minimum-row-sum process and the maximum-column-sum resource via row and column permutations.
+- **Lab 5** ([`5-lab/`](5-lab)) measures and compares execution time of two triple-nested loops over a `100 x 100 x 100` array that differ only in index order, demonstrating the effect of cache locality.
+- **Lab 6** ([`6-lab/`](6-lab)) is the same benchmark scaled to `300 x 300 x 300`, built with profiling instrumentation; [`6-lab.sh`](6-lab/6-lab.sh) compiles with `-pg -O2`, runs the binary, and produces a `gprof` report.
 
 ## Tech stack
 
