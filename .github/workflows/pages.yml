@@ -1,0 +1,50 @@
+name: Deploy showcase to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 7.0.0
+
+      # Compile the C++ labs (1, 2, 5, 6) to WebAssembly modules in web/build/
+      - name: Build WebAssembly modules
+        run: ./web/wasm/build.sh
+
+      # Mirror the repo layout so web/pyodide.toml can load ../3-lab/*.py and ../4-lab/*.py
+      - name: Assemble site
+        run: |
+          mkdir -p _site/web
+          cp web/*.html web/*.js web/*.py web/*.toml web/*.svg _site/web/
+          cp -r web/build _site/web/
+          cp -r 1-lab 2-lab 3-lab 4-lab 5-lab 6-lab _site/
+          find _site -name '__pycache__' -prune -exec rm -rf {} +
+          echo '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=./web/"><title>Operating Systems Labs</title><link rel="icon" href="./web/icon.svg"><a href="./web/">Open the showcase</a>' > _site/index.html
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

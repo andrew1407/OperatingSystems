@@ -1,0 +1,7 @@
+packages = ["numpy"]
+
+[files]
+"../3-lab/3-lab.py" = "./labs/3-lab.py"
+"../3-lab/ShortestJobFirst.py" = "./labs/ShortestJobFirst.py"
+"../4-lab/4-lab.py" = "./labs/4-lab.py"
+"./showcase.py" = "./showcase.py"

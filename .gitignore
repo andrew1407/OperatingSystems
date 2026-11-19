@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Showcase build outputs (built in CI by web/wasm/build.sh)
+web/build/
+web/wasm/gen/
+_site/
+__pycache__/
