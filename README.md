@@ -1,5 +1,13 @@
 # OperatingSystems
 
+<p align="center">
+  <a href="https://andrew1407.github.io/OperatingSystems/" title="Open the labs in the browser">
+    <img src="web/icon.svg" alt="Operating Systems Labs" width="140" height="140">
+  </a>
+</p>
+
+[![pages deploy badge](https://github.com/andrew1407/OperatingSystems/actions/workflows/pages.yml/badge.svg)](https://andrew1407.github.io/OperatingSystems/)
+
 A collection of operating-systems coursework labs written in C++ and Python, covering dynamic memory allocators, CPU scheduling, a process-to-resource planner, and cache-locality optimization.
 
 ## Labs
@@ -26,6 +34,24 @@ A collection of operating-systems coursework labs written in C++ and Python, cov
 - **Lab 4** ([`4-lab/`](4-lab/4-lab.py)) generates a random binary matrix and runs a planner that, per diagonal step, swaps in the minimum-row-sum process and the maximum-column-sum resource via row and column permutations.
 - **Lab 5** ([`5-lab/`](5-lab/5-lab.cpp)) measures and compares execution time of two triple-nested loops over a `100 x 100 x 100` array that differ only in index order, demonstrating the effect of cache locality.
 - **Lab 6** ([`6-lab/`](6-lab/6-lab.cpp)) is the same benchmark scaled to `300 x 300 x 300`, built with profiling instrumentation; [`6-lab.sh`](6-lab/6-lab.sh) compiles with `-pg -O2`, runs the binary, and produces a `gprof` report.
+
+## Showcase
+
+**[Open the labs in the browser](https://andrew1407.github.io/OperatingSystems/)**. Every lab runs from its own source code, with adjustable parameters, interactive views and charts, and buttons to copy each chart (PNG or CSV), drawing, table, text output and set of results.
+
+- **C++ labs (1, 2, 5, 6)** are compiled to WebAssembly with emscripten by [`web/wasm/build.sh`](web/wasm/build.sh). Labs 1 and 2 show the heap map or buddy tree after each `allocateMemory` / `reallocateMemory` / `freeMemory` call, with the lab's own memory dump; the operations are the lab's test drivers, editable, plus buttons for one more call. Lab 5 sweeps the array size (a build-time copy of `5-lab.cpp` makes `ARR_SIZE` settable, [`web/wasm/gen.py`](web/wasm/gen.py)), and labs 5 and 6 run in a Web Worker.
+- **Threads are Web Workers.** GitHub Pages can't send the COOP/COEP headers that wasm threads need. So `pthread_create`, which `std::thread` and `std::async` call, is defined in [`web/wasm/lab2.cpp`](web/wasm/lab2.cpp): it pauses the starting thread with Asyncify, and the page runs the thread in a worker on a copy of the module's memory, then copies it back. That's exact for lab 2, which joins or waits on each thread before touching the allocator again.
+- **Lab 6 isn't gprof.** gprof can't run in a browser, so `6-lab.cpp` is built with `-finstrument-functions`, and hooks time each call with `performance.now()`. The page shows a flat profile in gprof's columns, a call graph and a call timeline, all measured in the browser.
+- **Python labs (3, 4)** run in [Pyodide](https://pyodide.org), in a Web Worker so the page never freezes. [`web/showcase.py`](web/showcase.py) runs `3-lab.py` top to bottom with matplotlib swapped for a recorder, and runs lab 4's `runPlanner` on a numpy array that records each permutation for the step-by-step view.
+
+Run it locally (needs [emsdk](https://emscripten.org/docs/getting_started/downloads.html)):
+
+```sh
+./web/wasm/build.sh              # builds web/build/*.mjs + .wasm
+python -m http.server            # then open http://localhost:8000/web/
+```
+
+The [pages workflow](.github/workflows/pages.yml) builds and deploys it on every push to `main`.
 
 ## Tech stack
 
@@ -93,7 +119,8 @@ python 4-lab/4-lab.py
 │   └── 4-lab.py           # matrix-based process/resource planner
 ├── 5-lab/
 │   └── 5-lab.cpp          # cache-locality benchmark
-└── 6-lab/
-    ├── 6-lab.cpp          # benchmark for gprof profiling
-    └── 6-lab.sh           # build/run/profile script
+├── 6-lab/
+│   ├── 6-lab.cpp          # benchmark for gprof profiling
+│   └── 6-lab.sh           # build/run/profile script
+└── web/                   # GitHub Pages showcase (page, workers, wasm/ build)
 ```
