@@ -12,6 +12,8 @@ def generateMatrix(size):
 
 def getMaxSumCol(matrix):
   [ columnsIdx ] = np.where(matrix[0] != 0)
+  if not len(columnsIdx):
+    columnsIdx = np.arange(matrix.shape[1])
   maxSumCol = [ matrix[:, col].sum() for col in columnsIdx ]
   idx = np.array(maxSumCol).argmax()
   return columnsIdx[idx]
@@ -21,7 +23,7 @@ def runPlanner(matrix):
     subMatrix = matrix[i:, i:]
     subRowIdx = i + getMinSumRow(subMatrix)
 
-    rowMatrix_i = A[i].copy()
+    rowMatrix_i = matrix[i].copy()
     matrix[i] = matrix[subRowIdx].copy()
     matrix[subRowIdx] = rowMatrix_i
 

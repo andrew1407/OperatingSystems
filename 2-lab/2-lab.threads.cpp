@@ -40,7 +40,7 @@ class Allocator {
           addrs_vector buddyClass = { blockPtr + (1 << insertedSize) };
           _freeBlocks.emplace(insertedSize, buddyClass);
         } else {
-          _freeBlocks[insertedSize].push_back(blockPtr);
+          _freeBlocks[insertedSize].push_back(blockPtr + (1 << insertedSize));
         }
     }
 
@@ -69,11 +69,9 @@ class Allocator {
       }
       addrs_vector::iterator coalesced = sizeClass->begin();
       const size_t buddySize = 1 << blockSize;
+      const block_addr buddyPtr = _startPtr + ((blockPtr - _startPtr) ^ buddySize);
       while (coalesced != sizeClass->end())
-        if (
-          blockPtr + buddySize == *coalesced ||
-          blockPtr - buddySize == *coalesced
-        ) break;
+        if (buddyPtr == *coalesced) break;
         else coalesced++;
       if (coalesced == sizeClass->end()) {
         sizeClass->push_back(blockPtr);
@@ -144,8 +142,8 @@ class Allocator {
       std::thread freeing([&] {
         freeMemory(blockPtr, blockSize);
       });
-      blockPtr = allocateMemory(resized);
       freeing.join();
+      blockPtr = allocateMemory(resized);
       return blockPtr;
     }
 

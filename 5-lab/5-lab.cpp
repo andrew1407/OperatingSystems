@@ -52,10 +52,10 @@ int main() {
   const int64_t opRes = calcTime(optimized);
   const double ratio = (float)unopRes / (float)opRes;
 
-  cout << "Unoptimized execution time: " << unopRes << " mircosec.\n";
-  cout << "Optimized execution time: " << opRes << " mircosec.\n";
-  cout << "Difference: " << unopRes - opRes << " mircosec.\n";
-  cout << "Ratio: " << ratio << " mircosec.\n";
+  cout << "Unoptimized execution time: " << unopRes << " microsec.\n";
+  cout << "Optimized execution time: " << opRes << " microsec.\n";
+  cout << "Difference: " << unopRes - opRes << " microsec.\n";
+  cout << "Ratio: " << ratio << ".\n";
 
   return 0;
 }

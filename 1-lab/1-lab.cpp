@@ -47,14 +47,18 @@ class Allocator {
       const size_t freeSize = blockSize - allocSize;
       *(header*)((char*)blockPtr + allocSize) =
         _mkHeader(freeSize, false, ((header*)blockPtr)->current);
-      const bool nextAlloc = _getAlloc(((header*)nextPtr)->current);
-      const size_t nextSize = _getSize(((header*)nextPtr)->current);
-      if (nextAlloc) {
-        *(header*)nextPtr = _mkHeader(nextSize, nextAlloc, freeSize, false);
-      } else {
-        nextPtr = ((char*)blockPtr + allocSize);
-        *(header*)nextPtr = _mkHeader(freeSize + nextSize, false, ((header*)blockPtr)->current);
+      if (nextPtr < _endPtr) {
+        const bool nextAlloc = _getAlloc(((header*)nextPtr)->current);
+        const size_t nextSize = _getSize(((header*)nextPtr)->current);
+        if (nextAlloc) {
+          *(header*)nextPtr = _mkHeader(nextSize, nextAlloc, freeSize, false);
+        } else {
+          nextPtr = ((char*)blockPtr + allocSize);
+          *(header*)nextPtr = _mkHeader(freeSize + nextSize, false, ((header*)blockPtr)->current);
+        }
       }
+    } else if (nextPtr < _endPtr) {
+      ((header*)nextPtr)->previous = ((header*)blockPtr)->current;
     }
     return (void*)((char*)blockPtr + HEADER_SIZE);
   }
@@ -125,7 +129,7 @@ class Allocator {
       if (prvDesc && !_getAlloc(prvDesc)) {
         const int prvSize = _getSize(prvDesc);
         blockPtr = (void*)((char*)blockPtr - prvSize);
-        *(header*)blockPtr = _mkHeader(prvSize + blockSize, false, prvDesc);
+        *(header*)blockPtr = _mkHeader(prvSize + blockSize, false, ((header*)blockPtr)->previous);
         modified = true;
       }
       const void* nextPtr = (void*)((char*)blockPtr + _getSize(((header*)blockPtr)->current));
@@ -134,8 +138,11 @@ class Allocator {
       if (!_getAlloc(nextDesc)) {
         *(header*)blockPtr =
           _mkHeader(_getSize(((header*)blockPtr)->current) + _getSize(nextDesc), false, ((header*)blockPtr)->previous);
+        const void* afterPtr = (void*)((char*)blockPtr + _getSize(((header*)blockPtr)->current));
+        if (afterPtr < _endPtr)
+          ((header*)afterPtr)->previous = ((header*)blockPtr)->current;
         modified = true;
-      } else {
+      } else if (nextPtr < _endPtr) {
         *(header*)nextPtr =
           _mkHeader(_getSize(nextDesc), true, _getSize(((header*)blockPtr)->current), false);
       }

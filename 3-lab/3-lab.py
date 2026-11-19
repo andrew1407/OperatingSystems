@@ -14,7 +14,7 @@ intensitiesList = numpy.arange(*intensities).tolist()
 avgsTime, intensities, idles = list(), list(), list()
 for intensity in intensitiesList:
   _, desc = ShortestJobFirst(Np, intensity, burstTimeRange)
-  avgsTime.append(desc["sumWaitTime"])
+  avgsTime.append(desc["avgWaitTime"])
   intensities.append(desc["intensity"])  
   idles.append(desc["idle"])
 
@@ -53,8 +53,8 @@ plt.figure()
 
 
 plt.plot(avgsTime2, procRange)
-plt.xlabel("Average wait time")
+plt.xlabel("Completion time")
 plt.ylabel("Processes amount")
-plt.title("Processes amount(Average wait time)")
+plt.title("Processes amount(Completion time)")
 
 plt.show()
