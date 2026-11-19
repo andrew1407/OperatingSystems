@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" data-badge="1">
-  <!-- Heap blocks with their headers, some allocated and one free, and a scheduler's clock, in the showcase's colours, on a round outlined badge -->
-  <circle cx="32" cy="32" r="30" fill="#ffffff" stroke="#3557d6" stroke-width="4"/>
+  <!-- Heap blocks with their headers, some allocated and one free, and a scheduler's clock, in the showcase's peach colours, on a round outlined badge -->
+  <circle cx="32" cy="32" r="30" fill="#ffffff" stroke="#ec7a4f" stroke-width="4"/>
   <svg x="11.55" y="11.55" width="40.9" height="40.9" viewBox="1.4 3.7 45.2 45.2">
     <g stroke-width="2.6" stroke-linejoin="round">
-      <rect x="9" y="5" width="19" height="12" rx="3" fill="#d8ecfb" stroke="#4a90c8"/>
+      <rect x="9" y="5" width="19" height="12" rx="3" fill="#ffe7da" stroke="#f4a27e"/>
       <rect x="31" y="5" width="10" height="12" rx="3" fill="#fbf1cc" stroke="#b8971b"/>
-      <rect x="3" y="20" width="11" height="12" rx="3" fill="#ffffff" stroke="#3557d6"/>
-      <rect x="17" y="20" width="28" height="12" rx="3" fill="#d8ecfb" stroke="#4a90c8"/>
+      <rect x="3" y="20" width="11" height="12" rx="3" fill="#ffffff" stroke="#ec7a4f"/>
+      <rect x="17" y="20" width="28" height="12" rx="3" fill="#ffe7da" stroke="#f4a27e"/>
       <rect x="9" y="35" width="13" height="12" rx="3" fill="#fbf1cc" stroke="#b8971b"/>
     </g>
-    <path d="M14 9v4M36 9v4M8 24v4M22 24v4M14 39v4" stroke="#1f4f80" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="34" cy="38" r="9.5" fill="#ffffff" stroke="#3557d6" stroke-width="2.8"/>
-    <path d="M34 38v-5.5M34 38h4.5" stroke="#1f4f80" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M14 9v4M36 9v4M8 24v4M22 24v4M14 39v4" stroke="#9c4421" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="34" cy="38" r="9.5" fill="#ffffff" stroke="#ec7a4f" stroke-width="2.8"/>
+    <path d="M34 38v-5.5M34 38h4.5" stroke="#9c4421" stroke-width="2.6" stroke-linecap="round"/>
   </svg>
 </svg>
